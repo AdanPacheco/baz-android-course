@@ -15,13 +15,19 @@ import com.example.capstoneproject.databinding.FragmentBookListBinding
 import com.example.capstoneproject.ui.adapter.availableBooks.AvailableBooksAdapter
 import com.example.capstoneproject.ui.viewmodel.CurrencyViewModel
 import com.example.capstoneproject.utils.ResultState
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class BookListFragment : Fragment() {
 
     private var _binding: FragmentBookListBinding? = null
     private val binding get() = _binding!!
     private val currencyViewModel: CurrencyViewModel by viewModels()
+    private val onClickItem: (AvailableBookModel) -> Unit = { book ->
+        val bundle = Bundle()
+        bundle.putParcelable("BOOK", book)
+        NavHostFragment.findNavController(this).navigate(R.id.action_bookListFragment_to_bookDetailFragment, bundle)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,11 +67,6 @@ class BookListFragment : Fragment() {
         }
     }
 
-    private fun onClickItem(book: AvailableBookModel) {
-        val bundle = Bundle()
-        bundle.putParcelable("BOOK", book)
-        NavHostFragment.findNavController(this).navigate(R.id.action_bookListFragment_to_bookDetailFragment, bundle)
-    }
 
     override fun onDestroy() {
         super.onDestroy()

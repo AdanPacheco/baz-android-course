@@ -13,12 +13,17 @@ import com.example.capstoneproject.domain.GetAvailableBooksUseCase
 import com.example.capstoneproject.domain.GetOrderBookUseCase
 import com.example.capstoneproject.domain.GetTickerUseCase
 import com.example.capstoneproject.utils.ResultState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CurrencyViewModel : ViewModel() {
-    private var getAvailableBooksUseCase = GetAvailableBooksUseCase()
-    private var getTickerUseCase = GetTickerUseCase()
-    private var getOrderBookUseCase = GetOrderBookUseCase()
+@HiltViewModel
+class CurrencyViewModel @Inject constructor(
+    private val getAvailableBooksUseCase: GetAvailableBooksUseCase,
+    private val getTickerUseCase: GetTickerUseCase,
+    private val getOrderBookUseCase: GetOrderBookUseCase
+) : ViewModel() {
+
 
     private var _availableBooks = MutableLiveData<ResultState<List<AvailableBookModel>>>()
     val availableBooks: LiveData<ResultState<List<AvailableBookModel>>> = _availableBooks
@@ -29,7 +34,7 @@ class CurrencyViewModel : ViewModel() {
     private val _orderBook = MutableLiveData<ResultState<OrderBookModel>>()
     val orderBook: LiveData<ResultState<OrderBookModel>> = _orderBook
 
-    fun clearDetail(){
+    fun clearDetail() {
         _ticker.value = ResultState.Loading()
         _orderBook.value = ResultState.Loading()
     }
@@ -39,7 +44,7 @@ class CurrencyViewModel : ViewModel() {
         try {
             _availableBooks.postValue(ResultState.Success(getAvailableBooksUseCase()))
         } catch (e: Exception) {
-            Log.e("getBooksException",e.message.toString())
+            Log.e("getBooksException", e.message.toString())
             _availableBooks.postValue(ResultState.Error(message = "No se a podido recuperar la informacion del servicio"))
         }
     }
@@ -49,16 +54,16 @@ class CurrencyViewModel : ViewModel() {
         try {
             _ticker.postValue(ResultState.Success(getTickerUseCase(book)))
         } catch (e: Exception) {
-            Log.e("getTickerException",e.message.toString())
+            Log.e("getTickerException", e.message.toString())
             _ticker.postValue(ResultState.Error(message = "No se a podido recuperar la informacion de detalle del servicio"))
         }
     }
 
-    fun getOrderBook(book:String) = viewModelScope.launch {
+    fun getOrderBook(book: String) = viewModelScope.launch {
         try {
             _orderBook.postValue(ResultState.Success(getOrderBookUseCase(book)))
-        }catch (e:Exception){
-            Log.e("getOrderBookException",e.message.toString())
+        } catch (e: Exception) {
+            Log.e("getOrderBookException", e.message.toString())
             _ticker.postValue(ResultState.Error(message = "No se a podido recuperar la informacion del servicio"))
         }
     }

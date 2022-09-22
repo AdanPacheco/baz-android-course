@@ -18,7 +18,9 @@ import com.example.capstoneproject.ui.adapter.orderBook.ask.AskAdapter
 import com.example.capstoneproject.ui.adapter.orderBook.bids.BidsAdapter
 import com.example.capstoneproject.ui.viewmodel.CurrencyViewModel
 import com.example.capstoneproject.utils.ResultState
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BookDetailFragment : Fragment() {
 
     private var _binding: FragmentBookDetailBinding? = null

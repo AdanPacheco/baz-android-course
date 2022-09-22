@@ -5,10 +5,10 @@ import com.example.capstoneproject.data.model.BitsoProvider
 import com.example.capstoneproject.data.model.orderBook.OrderBookModel
 import com.example.capstoneproject.data.model.ticker.TickerModel
 import com.example.capstoneproject.data.network.BitsoApiClient
+import javax.inject.Inject
 
-class BitsoRepository {
+class BitsoRepository @Inject constructor(private val api: BitsoApiClient) {
 
-    private val api = BitsoApiClient()
 
     suspend fun getAllAvailableBooks(): List<AvailableBookModel> {
         val response = api.getAvailableBooks()
