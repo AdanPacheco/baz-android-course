@@ -9,22 +9,23 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.capstoneproject.R
 import com.example.capstoneproject.data.model.availableBooks.AvailableBookModel
 import com.example.capstoneproject.databinding.ItemBookBinding
+import com.example.capstoneproject.domain.model.availableBook.AvailableBook
+import com.example.capstoneproject.utils.Constants
 
-class BookViewHolder(view:View) : RecyclerView.ViewHolder(view) {
+class BookViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val binding = ItemBookBinding.bind(view)
 
-    @SuppressLint("SetTextI18n")
-    fun render(book: AvailableBookModel, onClickItem:(AvailableBookModel)-> Unit) {
+    fun render(book: AvailableBook, onClickItem: (AvailableBook) -> Unit) {
 
         val coin = book.book.split('_')
 
 
-        binding.apply{
+        binding.apply {
             tvBookName.text = book.book
-            tvMaximumPrice.text = "$${book.maximum_price}"
+            tvMaximumPrice.text = itemView.context.getString(R.string.tv_maximum_price, book.maximum_price)
 
             Glide.with(binding.root.context)
-                .load("https://assets.coincap.io/assets/icons/${coin[0]}@2x.png")
+                .load("${Constants.URL_CRIPTO_ICONS}${coin[0]}${Constants.EXT_CRIPTO_ICONS}")
                 .placeholder(R.drawable.item_currency_placeholder)
                 .error(R.drawable.item_book_error)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)

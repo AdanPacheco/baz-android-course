@@ -1,6 +1,7 @@
 package com.example.capstoneproject.di
 
 import com.example.capstoneproject.data.network.BitsoService
+import com.example.capstoneproject.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,22 +19,26 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
+    fun providesLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
 
     @Singleton
     @Provides
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
-        val okHttpClient = OkHttpClient().newBuilder()
+        val okHttpClient = OkHttpClient().newBuilder().apply {
+            callTimeout(40, TimeUnit.SECONDS)
+            connectTimeout(40, TimeUnit.SECONDS)
+            readTimeout(40, TimeUnit.SECONDS)
+            writeTimeout(40, TimeUnit.SECONDS)
+            addInterceptor(loggingInterceptor)
+            addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader(Constants.USER_AGENT_HEADER, Constants.USER_AGENT_VALUE)
+                chain.proceed(request.build())
+            }
+        }.build()
 
-        okHttpClient.callTimeout(40, TimeUnit.SECONDS)
-        okHttpClient.connectTimeout(40, TimeUnit.SECONDS)
-        okHttpClient.readTimeout(40, TimeUnit.SECONDS)
-        okHttpClient.writeTimeout(40, TimeUnit.SECONDS)
-        okHttpClient.addInterceptor(loggingInterceptor)
-        okHttpClient.build()
-        return okHttpClient.build()
+        return okHttpClient
     }
 
     @Singleton
