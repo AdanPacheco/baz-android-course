@@ -10,8 +10,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-
-class GetAvailableBooksUseCaseTest{
+class GetAvailableBooksUseCaseTest {
 
     @RelaxedMockK
     private lateinit var repository: BitsoRepository
@@ -25,33 +24,33 @@ class GetAvailableBooksUseCaseTest{
 
     @Test
     fun `when the network connection is not available then get available books from database`() = runBlocking {
-        val availableBookList:List<AvailableBook> = listOf()
-        //Given
+        val availableBookList: List<AvailableBook> = listOf()
+        // Given
         coEvery { repository.getAllAvailableBooksFromDatabase() } returns availableBookList
 
-        //When
+        // When
         val result = getAvailableBooksUseCase(false)
 
-        //Then
+        // Then
         coVerify(exactly = 0) { repository.getAllAvailableBooksFromApi() }
-        coVerify(exactly = 0) { repository.insertAllAvailableBooksToDatabase(any())}
+        coVerify(exactly = 0) { repository.insertAllAvailableBooksToDatabase(any()) }
         coVerify(exactly = 1) { repository.getAllAvailableBooksFromDatabase() }
-        assert(availableBookList==result)
+        assert(availableBookList == result)
     }
 
     @Test
     fun `when the network connection is available then get available books from api and save it to database`() = runBlocking {
-        val availableBookList:List<AvailableBook> = listOf()
-        //Given
+        val availableBookList: List<AvailableBook> = listOf()
+        // Given
         coEvery { repository.getAllAvailableBooksFromApi() } returns availableBookList
 
-        //When
+        // When
         val result = getAvailableBooksUseCase(true)
 
-        //Then
+        // Then
         coVerify(exactly = 1) { repository.getAllAvailableBooksFromApi() }
         coVerify(exactly = 1) { repository.insertAllAvailableBooksToDatabase(any()) }
         coVerify(exactly = 0) { repository.getAllAvailableBooksFromDatabase() }
-        assert(availableBookList==result)
+        assert(availableBookList == result)
     }
 }

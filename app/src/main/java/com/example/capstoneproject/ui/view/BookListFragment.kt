@@ -31,7 +31,8 @@ class BookListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
@@ -67,7 +68,6 @@ class BookListFragment : Fragment() {
             }
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

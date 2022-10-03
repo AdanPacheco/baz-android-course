@@ -7,14 +7,14 @@ import com.example.capstoneproject.databinding.ItemOrderBookBinding
 import com.example.capstoneproject.domain.model.orderBook.Ask
 import com.example.capstoneproject.domain.model.orderBook.Bid
 
-class OrderBookViewHolder(view:View) : RecyclerView.ViewHolder(view) {
+class OrderBookViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val binding = ItemOrderBookBinding.bind(view)
 
-    fun render(item:Any){
+    fun render(item: Any) {
         var price = ""
         var amount = ""
 
-        when(item){
+        when (item) {
             is Bid -> {
                 price = item.price
                 amount = item.amount
@@ -23,14 +23,12 @@ class OrderBookViewHolder(view:View) : RecyclerView.ViewHolder(view) {
                 price = item.price
                 amount = item.amount
             }
-            else ->{}
+            else -> {}
         }
 
         binding.apply {
-            tvOrderPrice.text = itemView.context.getString(R.string.tv_order_price,price)
-            tvOrderAmount.text = itemView.context.getString(R.string.tv_order_amount,amount)
+            tvOrderPrice.text = itemView.context.getString(R.string.tv_order_price, price)
+            tvOrderAmount.text = itemView.context.getString(R.string.tv_order_amount, amount)
         }
     }
-
-
 }

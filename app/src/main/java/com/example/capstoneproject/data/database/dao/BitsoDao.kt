@@ -28,6 +28,4 @@ interface BitsoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrderBook(book: OrderBookEntity)
-
-
 }
