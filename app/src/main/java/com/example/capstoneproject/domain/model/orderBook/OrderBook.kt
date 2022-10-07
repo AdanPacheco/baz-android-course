@@ -8,5 +8,5 @@ data class OrderBook(
     val bids: List<Bid> = emptyList()
 )
 
-fun OrderBookModel.toDomain() = OrderBook(asks = asks.map { it.toDomain() }, bids =  bids.map { it.toDomain() })
-fun OrderBookEntity.toDomain() = OrderBook(asks = asks.map { it.toDomain() }, bids =  bids.map { it.toDomain() })
+fun OrderBookModel.toDomain() = OrderBook(asks = asks.map { it.toDomain() }, bids = bids.map { it.toDomain() })
+fun OrderBookEntity.toDomain() = OrderBook(asks = asks.map { it.toDomain() }, bids = bids.map { it.toDomain() })

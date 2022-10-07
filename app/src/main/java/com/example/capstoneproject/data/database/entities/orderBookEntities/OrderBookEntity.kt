@@ -9,10 +9,10 @@ import com.example.capstoneproject.domain.model.orderBook.OrderBook
 
 data class OrderBookEntity(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "book") val book: String = "",
+    @ColumnInfo(name = "book")
+    val book: String = "",
     @ColumnInfo(name = "asks") val asks: List<AskEntity> = emptyList(),
     @ColumnInfo(name = "bids") val bids: List<BidEntity> = emptyList()
 )
-
 
 fun OrderBook.toDatabase(book: String) = OrderBookEntity(book = book, asks = asks.map { it.toDatabase() }, bids = bids.map { it.toDatabase() })

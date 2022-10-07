@@ -8,8 +8,6 @@ import javax.inject.Inject
 class GetAvailableBooksUseCase @Inject constructor(private val repository: BitsoRepository) {
 
     suspend operator fun invoke(networkStatus: Boolean): List<AvailableBook> {
-
-
         return if (networkStatus) {
             val availableBooks = repository.getAllAvailableBooksFromApi()
             repository.insertAllAvailableBooksToDatabase(availableBooks = availableBooks.map { it.toDatabase() })
@@ -17,6 +15,5 @@ class GetAvailableBooksUseCase @Inject constructor(private val repository: Bitso
         } else {
             repository.getAllAvailableBooksFromDatabase()
         }
-
     }
 }

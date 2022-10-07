@@ -4,5 +4,5 @@ data class TickerModel(
     val book: String = "",
     val high: String = "",
     val last: String = "",
-    val low: String = "",
+    val low: String = ""
 )

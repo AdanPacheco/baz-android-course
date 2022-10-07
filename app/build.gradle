@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+
 }
 
 android {
@@ -50,6 +51,9 @@ dependencies {
     def glide_version = "4.13.0"
     def loggin_int_version = "4.10.0"
     def room_version = "2.4.3"
+    def rxjava_version ="3.1.5"
+    def rxandroid_version ="3.0.0"
+    def rxjava_adapter_version = "3.0.0"
 
 
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -72,6 +76,7 @@ dependencies {
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:$rxjava_adapter_version"
 
     //corrutinas
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
@@ -94,6 +99,11 @@ dependencies {
     //room
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    //rxjava
+    implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava3:rxandroid:$rxandroid_version"
+
 
 
     testImplementation 'junit:junit:4.13.2'

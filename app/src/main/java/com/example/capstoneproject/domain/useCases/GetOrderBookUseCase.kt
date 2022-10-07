@@ -7,8 +7,7 @@ import javax.inject.Inject
 
 class GetOrderBookUseCase @Inject constructor(private val repository: BitsoRepository) {
 
-    suspend operator fun invoke(book: String,networkStatus:Boolean): OrderBook {
-
+    suspend operator fun invoke(book: String, networkStatus: Boolean): OrderBook {
         return if (networkStatus) {
             val orderBook = repository.getOrderBookFromApi(book)
             repository.insertOrderBookToDatabase(orderBook = orderBook.toDatabase(book))
