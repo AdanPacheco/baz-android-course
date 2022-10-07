@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.capstoneproject.R
-import com.example.capstoneproject.data.model.orderBook.BidModel
+import com.example.capstoneproject.domain.model.orderBook.Bid
 import com.example.capstoneproject.ui.adapter.orderBook.OrderBookViewHolder
 
-class BidsAdapter : ListAdapter<BidModel, OrderBookViewHolder>(DiffUtilCallback){
+class BidsAdapter : ListAdapter<Bid, OrderBookViewHolder>(DiffUtilCallback){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderBookViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context).inflate(R.layout.item_order_book,parent,false)
         return OrderBookViewHolder(layoutInflater)
@@ -19,8 +19,7 @@ class BidsAdapter : ListAdapter<BidModel, OrderBookViewHolder>(DiffUtilCallback)
     }
 }
 
-private object DiffUtilCallback : DiffUtil.ItemCallback<BidModel>() {
-    override fun areItemsTheSame(oldItem: BidModel, newItem: BidModel): Boolean = oldItem.price == newItem.price || oldItem.amount == newItem.amount
-    override fun areContentsTheSame(oldItem: BidModel, newItem: BidModel): Boolean = oldItem == newItem
-
+private object DiffUtilCallback : DiffUtil.ItemCallback<Bid>() {
+    override fun areItemsTheSame(oldItem: Bid, newItem: Bid): Boolean = oldItem.price == newItem.price || oldItem.amount == newItem.amount
+    override fun areContentsTheSame(oldItem: Bid, newItem: Bid): Boolean = oldItem == newItem
 }
