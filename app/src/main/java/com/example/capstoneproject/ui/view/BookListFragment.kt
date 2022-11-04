@@ -10,10 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capstoneproject.R
-import com.example.capstoneproject.data.model.availableBooks.AvailableBookModel
 import com.example.capstoneproject.databinding.FragmentBookListBinding
+import com.example.capstoneproject.domain.model.availableBook.AvailableBook
 import com.example.capstoneproject.ui.adapter.availableBooks.AvailableBooksAdapter
 import com.example.capstoneproject.ui.viewmodel.CurrencyViewModel
+import com.example.capstoneproject.utils.Constants
 import com.example.capstoneproject.utils.ResultState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,20 +24,21 @@ class BookListFragment : Fragment() {
     private var _binding: FragmentBookListBinding? = null
     private val binding get() = _binding!!
     private val currencyViewModel: CurrencyViewModel by viewModels()
-    private val onClickItem: (AvailableBookModel) -> Unit = { book ->
+    private val onClickItem: (AvailableBook) -> Unit = { book ->
         val bundle = Bundle()
-        bundle.putParcelable("BOOK", book)
+        bundle.putParcelable(Constants.EXTRA_KEY, book)
         NavHostFragment.findNavController(this).navigate(R.id.action_bookListFragment_to_bookDetailFragment, bundle)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentBookListBinding.inflate(inflater, container, false)
 
-        currencyViewModel.getAvailableBooks()
+        currencyViewModel.getAvailableBooks(Constants.isNetworkAvailable(context))
 
         setupRecyclerView()
 
@@ -66,7 +68,6 @@ class BookListFragment : Fragment() {
             }
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

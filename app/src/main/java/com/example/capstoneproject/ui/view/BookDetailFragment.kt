@@ -2,21 +2,21 @@ package com.example.capstoneproject.ui.view
 
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capstoneproject.R
-import com.example.capstoneproject.data.model.availableBooks.AvailableBookModel
-import com.example.capstoneproject.data.model.ticker.TickerModel
 import com.example.capstoneproject.databinding.FragmentBookDetailBinding
-import com.example.capstoneproject.ui.adapter.availableBooks.AvailableBooksAdapter
+import com.example.capstoneproject.domain.model.availableBook.AvailableBook
+import com.example.capstoneproject.domain.model.ticker.Ticker
 import com.example.capstoneproject.ui.adapter.orderBook.ask.AskAdapter
 import com.example.capstoneproject.ui.adapter.orderBook.bids.BidsAdapter
 import com.example.capstoneproject.ui.viewmodel.CurrencyViewModel
+import com.example.capstoneproject.utils.Constants
 import com.example.capstoneproject.utils.ResultState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +28,8 @@ class BookDetailFragment : Fragment() {
     private val currencyViewModel: CurrencyViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBookDetailBinding.inflate(inflater, container, false)
@@ -40,20 +41,20 @@ class BookDetailFragment : Fragment() {
     private fun setupDetails() {
         val args = arguments
         if (args != null) {
-            if (args.containsKey("BOOK")) {
+            if (args.containsKey(Constants.EXTRA_KEY)) {
                 val book = if (Build.VERSION.SDK_INT >= 33) {
-                    args.getParcelable("BOOK", AvailableBookModel::class.java)
+                    args.getParcelable(Constants.EXTRA_KEY, AvailableBook::class.java)
                 } else {
-                    args.getParcelable("BOOK")
+                    args.getParcelable(Constants.EXTRA_KEY)
                 }
                 loadDetailData(book)
             }
         }
     }
 
-    private fun loadDetailData(book: AvailableBookModel?) {
+    private fun loadDetailData(book: AvailableBook?) {
         book?.let {
-            currencyViewModel.getTicker(book.book)
+            currencyViewModel.getTicker(book.book, Constants.isNetworkAvailable(context))
 
             currencyViewModel.ticker.observe(viewLifecycleOwner) { response ->
                 when (response) {
@@ -70,7 +71,7 @@ class BookDetailFragment : Fragment() {
                             currencyLowestPrice.text = activity?.resources?.getString(R.string.tv_lowest_price, response.data?.low)
                         }
 
-                        currencyViewModel.getOrderBook(book.book)
+                        currencyViewModel.getOrderBook(book.book, Constants.isNetworkAvailable(context))
 
                         setupRecyclerViewsBookOrder(response)
                     }
@@ -80,7 +81,7 @@ class BookDetailFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerViewsBookOrder(response: ResultState<TickerModel>) {
+    private fun setupRecyclerViewsBookOrder(response: ResultState<Ticker>) {
         val askAdapter = AskAdapter()
         val bidAdapter = BidsAdapter()
         val asklayoutManager = LinearLayoutManager(requireContext())

@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.capstoneproject.R
-import com.example.capstoneproject.data.model.orderBook.AskModel
+import com.example.capstoneproject.domain.model.orderBook.Ask
 import com.example.capstoneproject.ui.adapter.orderBook.OrderBookViewHolder
 
-class AskAdapter: ListAdapter<AskModel, OrderBookViewHolder>(DiffUtilCallback){
+class AskAdapter : ListAdapter<Ask, OrderBookViewHolder>(DiffUtilCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderBookViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context).inflate(R.layout.item_order_book,parent,false)
+        val layoutInflater = LayoutInflater.from(parent.context).inflate(R.layout.item_order_book, parent, false)
         return OrderBookViewHolder(layoutInflater)
     }
 
@@ -19,8 +19,7 @@ class AskAdapter: ListAdapter<AskModel, OrderBookViewHolder>(DiffUtilCallback){
     }
 }
 
-private object DiffUtilCallback : DiffUtil.ItemCallback<AskModel>() {
-    override fun areItemsTheSame(oldItem: AskModel, newItem: AskModel): Boolean = oldItem.price == newItem.price || oldItem.amount == newItem.amount
-    override fun areContentsTheSame(oldItem: AskModel, newItem: AskModel): Boolean = oldItem == newItem
-
+private object DiffUtilCallback : DiffUtil.ItemCallback<Ask>() {
+    override fun areItemsTheSame(oldItem: Ask, newItem: Ask): Boolean = oldItem.price == newItem.price || oldItem.amount == newItem.amount
+    override fun areContentsTheSame(oldItem: Ask, newItem: Ask): Boolean = oldItem == newItem
 }

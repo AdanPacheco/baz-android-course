@@ -1,24 +1,63 @@
 package com.example.capstoneproject.data
 
-import com.example.capstoneproject.data.model.availableBooks.AvailableBookModel
-import com.example.capstoneproject.data.model.BitsoProvider
-import com.example.capstoneproject.data.model.orderBook.OrderBookModel
-import com.example.capstoneproject.data.model.ticker.TickerModel
+import com.example.capstoneproject.data.database.dao.BitsoDao
+import com.example.capstoneproject.data.database.entities.availableBooksEntities.AvailableBookEntity
+import com.example.capstoneproject.data.database.entities.orderBookEntities.OrderBookEntity
+import com.example.capstoneproject.data.database.entities.tickerEntities.TickerEntity
+import com.example.capstoneproject.data.model.ticker.TickerResponse
 import com.example.capstoneproject.data.network.BitsoApiClient
+import com.example.capstoneproject.domain.model.availableBook.AvailableBook
+import com.example.capstoneproject.domain.model.availableBook.toDomain
+import com.example.capstoneproject.domain.model.orderBook.OrderBook
+import com.example.capstoneproject.domain.model.orderBook.toDomain
+import com.example.capstoneproject.domain.model.ticker.Ticker
+import com.example.capstoneproject.domain.model.ticker.toDomain
+import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
-class BitsoRepository @Inject constructor(private val api: BitsoApiClient) {
+class BitsoRepository @Inject constructor(
+    private val api: BitsoApiClient,
+    private val bitsoDao: BitsoDao
+) {
 
-
-    suspend fun getAllAvailableBooks(): List<AvailableBookModel> {
+    suspend fun getAllAvailableBooksFromApi(): List<AvailableBook> {
         val response = api.getAvailableBooks()
-        BitsoProvider.availableBooks = response.filter { it.book.contains("mxn") }
-        return BitsoProvider.availableBooks
+        return response.map { it.toDomain() }
     }
 
-    suspend fun getTicker(book: String): TickerModel = api.getTicker(book)
+    suspend fun getAllAvailableBooksFromDatabase(): List<AvailableBook> {
+        val response = bitsoDao.getAllAvailableBooks()
+        return response.map { it.toDomain() }
+    }
 
+    suspend fun insertAllAvailableBooksToDatabase(availableBooks: List<AvailableBookEntity>) {
+        bitsoDao.insertAllAvailableBooks(availableBooks)
+    }
 
-    suspend fun getOrderBook(book: String): OrderBookModel = api.getOrderBook(book)
+    fun getTickerFromApi(book: String): Single<TickerResponse> {
+        return api.getTicker(book)
+    }
 
+    suspend fun getTickerFromDatabase(book: String): Ticker {
+        val response = bitsoDao.getTicker(book)
+        return response.toDomain()
+    }
+
+    suspend fun insertTickerToDatabase(ticker: TickerEntity) {
+        bitsoDao.insertTicker(ticker)
+    }
+
+    suspend fun getOrderBookFromApi(book: String): OrderBook {
+        val response = api.getOrderBook(book)
+        return response.toDomain()
+    }
+
+    suspend fun getOrderBookFromDatabase(book: String): OrderBook {
+        val response = bitsoDao.getOrderBook(book)
+        return response.toDomain()
+    }
+
+    suspend fun insertOrderBookToDatabase(orderBook: OrderBookEntity) {
+        bitsoDao.insertOrderBook(orderBook)
+    }
 }
